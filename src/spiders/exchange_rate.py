@@ -25,6 +25,31 @@ class ExchangeRateSpider(scrapy.Spider):
                 'e_rates': e_rates
             }
 
+            yield scrapy.Request(
+                response.url,
+                callback=self.parse_bank_notes,
+                meta=tables
+            )
+
+    def parse_bank_notes(self, response):
+        for i, rate in enumerate(response.meta['bank_notes']):
+            date_field = ''
+
+            if i % 2 == 0:
+                # date always in even row
+                date_field = scrapy.Selector(text=rate).css('td:nth-child(1)::text').getall()
+
+                # record beli
+                usd = scrapy.Selector(text=rate).css('td:nth-child(3)::text').get()
+                # sgd = scrapy.Selector(text=rate).css('td:nth-child(4)::text').get()
+            else:
+                # record jual
+                usd = scrapy.Selector(text=rate).css('td:nth-child(2)::text').get()
+                # sgd = scrapy.Selector(text=rate).css('td:nth-child(3)::text').get()
+
             yield {
-                "tables": tables
+                'url': response.url,
+                'usd': usd,
+                'date': ' '.join(date_field)
+                # 'sgd': sgd
             }
