@@ -3,7 +3,7 @@ from src.utils import *
 
 
 base_url = "https://kursdollar.org/bank"
-# banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
+# banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'cimb', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
 banks = ['bi', 'mandiri', 'bca', 'bni']
 query = 'v_range=01/01/2024-05/31/2024'
 
@@ -69,7 +69,7 @@ class ExchangeRateSpider(scrapy.Spider):
                     idr_exchange_rate['GBP']['buy'] = parse_price_rate(element_selector.css('td:nth-child(9)::text').get())
                     idr_exchange_rate['JPY']['buy'] = parse_price_rate(element_selector.css('td:nth-child(10)::text').get())
                     # handling field for riyal
-                    if parse_bank_name(response.url) == 'bi' or 'mandiri' or 'bca' or 'bni' or 'bri':
+                    if parse_bank_name(response.url) == 'bi' or 'mandiri' or 'bca' or 'bni' or 'bri' or 'cimb':
                         idr_exchange_rate['SAR']['buy'] = parse_price_rate(element_selector.css('td:nth-child(15)::text').get())
                     elif parse_bank_name(response.url) == 'btn':
                         idr_exchange_rate['SAR']['buy'] = parse_price_rate(element_selector.css('td:nth-child(12)::text').get())
