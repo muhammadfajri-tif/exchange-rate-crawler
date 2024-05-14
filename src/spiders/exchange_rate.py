@@ -24,16 +24,18 @@ class ExchangeRateSpider(scrapy.Spider):
             dd_tt = rates.xpath("//tr[@class='title_table'][2]/following-sibling::tr[count(preceding-sibling::tr[@class='title_table']) < 3]").getall()
             e_rates = rates.xpath("//tr[@class='title_table'][3]/following-sibling::tr").getall()
 
-            tables = {
-                'bank_notes': bank_notes,
-                'dd_tt': dd_tt,
-                'e_rates': e_rates
+            bank_rates = {
+                'tables': [
+                    {'name': 'bank notes', 'payload': bank_notes},
+                    {'name': 'dd/tt', 'payload': dd_tt},
+                    {'name': 'special rates', 'payload': e_rates},
+                ]
             }
 
             yield scrapy.Request(
                 response.url,
                 callback=self.parse_bank_notes_buy_rates,
-                meta=tables
+                meta=bank_rates
             )
 
     def parse_bank_notes_buy_rates(self, response):
@@ -42,31 +44,33 @@ class ExchangeRateSpider(scrapy.Spider):
             "USD": {},
         }
 
-        for i, rate in enumerate(response.meta['bank_notes']):
-            element_selector = scrapy.Selector(text=rate)
-            if i % 2 == 0:
-                ## date always in even row
-                date_field = element_selector.css('td:nth-child(1)::text').getall()
+        # loop bank rate tables
+        for table in response.meta['tables']:
 
-                ## record beli
-                idr_exchange_rate['USD']['buy'] = parse_price_rate(element_selector.css('td:nth-child(3)::text').get())
-                # sgd = scrapy.Selector(text=rate).css('td:nth-child(4)::text').get()
+            # loop rows each table rates
+            for i, rate in enumerate(table['payload']):
+                element_selector = scrapy.Selector(text=rate)
+                if i % 2 == 0:
+                    ## date always in even row
+                    date_field = element_selector.css('td:nth-child(1)::text').getall()
 
-                ## skip adding to yield to make sure buy & sell tied together in one record
-                continue
-            else:
-                ## record jual
-                idr_exchange_rate['USD']['sell'] = parse_price_rate(element_selector.css('td:nth-child(2)::text').get())
-                # sgd = scrapy.Selector(text=rate).css('td:nth-child(3)::text').get()
+                    ## record beli
+                    idr_exchange_rate['USD']['buy'] = parse_price_rate(element_selector.css('td:nth-child(3)::text').get())
 
-                ## skip if there's no data
-                if not (date_field and idr_exchange_rate['USD']['buy']):
+                    ## skip adding to yield to make sure buy & sell tied together in one record
                     continue
+                else:
+                    ## record jual
+                    idr_exchange_rate['USD']['sell'] = parse_price_rate(element_selector.css('td:nth-child(2)::text').get())
 
-            yield {
-                'type': 'bank notes',
-                'url': response.url,
-                'bank': parse_bank_name(response.url),
-                'date': parse_date_time(' '.join(date_field)),
-                'IDRExchangeRate': idr_exchange_rate,
-            }
+                    ## skip if there's no data
+                    if not (date_field and idr_exchange_rate['USD']['buy']):
+                        continue
+
+                yield {
+                    'type': table['name'],
+                    'url': response.url,
+                    'bank': parse_bank_name(response.url),
+                    'date': parse_date_time(' '.join(date_field)),
+                    'IDRExchangeRate': idr_exchange_rate,
+                }
