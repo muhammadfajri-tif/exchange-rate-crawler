@@ -1,10 +1,8 @@
 import scrapy
+from src.utils import *
 
 
 class ExchangeRateSpider(scrapy.Spider):
-    banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
-    query = 'v_range=01/01/2024-05/31/2024'
-
     name = "exchange_rate"
     allowed_domains = ["kursdollar.org"]
     start_urls = ["https://kursdollar.org/bank/mandiri.php"]
@@ -27,29 +25,41 @@ class ExchangeRateSpider(scrapy.Spider):
 
             yield scrapy.Request(
                 response.url,
-                callback=self.parse_bank_notes,
+                callback=self.parse_bank_notes_buy_rates,
                 meta=tables
             )
 
-    def parse_bank_notes(self, response):
+    def parse_bank_notes_buy_rates(self, response):
+        date_field = ''
+        idr_exchange_rate = {
+            "USD": {},
+        }
+
         for i, rate in enumerate(response.meta['bank_notes']):
-            date_field = ''
-
+            element_selector = scrapy.Selector(text=rate)
             if i % 2 == 0:
-                # date always in even row
-                date_field = scrapy.Selector(text=rate).css('td:nth-child(1)::text').getall()
+                ## date always in even row
+                date_field = element_selector.css('td:nth-child(1)::text').getall()
 
-                # record beli
-                usd = scrapy.Selector(text=rate).css('td:nth-child(3)::text').get()
+                ## record beli
+                idr_exchange_rate['USD']['buy'] = element_selector.css('td:nth-child(3)::text').get() or ''
                 # sgd = scrapy.Selector(text=rate).css('td:nth-child(4)::text').get()
+
+                ## skip adding to yield to make sure buy & sell tied together in one record
+                continue
             else:
-                # record jual
-                usd = scrapy.Selector(text=rate).css('td:nth-child(2)::text').get()
+                ## record jual
+                idr_exchange_rate['USD']['sell'] = element_selector.css('td:nth-child(2)::text').get() or ''
                 # sgd = scrapy.Selector(text=rate).css('td:nth-child(3)::text').get()
 
+                ## skip if there's no data
+                if not (date_field and idr_exchange_rate['USD']['buy']):
+                    continue
+
             yield {
+                'type': 'bank notes',
                 'url': response.url,
-                'usd': usd,
-                'date': ' '.join(date_field)
-                # 'sgd': sgd
+                'bank': parse_bank_name(response.url),
+                'date': ' '.join(date_field),
+                'IDRExchangeRate': idr_exchange_rate,
             }
