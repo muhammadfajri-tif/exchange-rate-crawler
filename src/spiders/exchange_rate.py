@@ -2,10 +2,17 @@ import scrapy
 from src.utils import *
 
 
+base_url = "https://kursdollar.org/bank"
+# banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
+banks = ['bi', 'mandiri', 'bca', 'bni']
+query = 'v_range=01/01/2024-05/31/2024'
+
 class ExchangeRateSpider(scrapy.Spider):
     name = "exchange_rate"
     allowed_domains = ["kursdollar.org"]
-    start_urls = ["https://kursdollar.org/bank/mandiri.php"]
+    # start_urls = ["https://kursdollar.org/bank/mandiri.php"]
+    start_urls = [f"{base_url}/{bank}.php" for bank in banks]
+    # start_urls = [f"{base_url}/{bank}.php?{query}" for bank in banks]
 
     def parse(self, response, **kwargs):
         for rates in response.css('table'):
