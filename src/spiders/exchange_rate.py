@@ -42,14 +42,14 @@ class ExchangeRateSpider(scrapy.Spider):
                 date_field = element_selector.css('td:nth-child(1)::text').getall()
 
                 ## record beli
-                idr_exchange_rate['USD']['buy'] = element_selector.css('td:nth-child(3)::text').get() or ''
+                idr_exchange_rate['USD']['buy'] = parse_price_rate(element_selector.css('td:nth-child(3)::text').get())
                 # sgd = scrapy.Selector(text=rate).css('td:nth-child(4)::text').get()
 
                 ## skip adding to yield to make sure buy & sell tied together in one record
                 continue
             else:
                 ## record jual
-                idr_exchange_rate['USD']['sell'] = element_selector.css('td:nth-child(2)::text').get() or ''
+                idr_exchange_rate['USD']['sell'] = parse_price_rate(element_selector.css('td:nth-child(2)::text').get())
                 # sgd = scrapy.Selector(text=rate).css('td:nth-child(3)::text').get()
 
                 ## skip if there's no data
@@ -60,6 +60,6 @@ class ExchangeRateSpider(scrapy.Spider):
                 'type': 'bank notes',
                 'url': response.url,
                 'bank': parse_bank_name(response.url),
-                'date': ' '.join(date_field),
+                'date': parse_date_time(' '.join(date_field)),
                 'IDRExchangeRate': idr_exchange_rate,
             }
