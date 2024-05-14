@@ -42,6 +42,12 @@ class ExchangeRateSpider(scrapy.Spider):
         date_field = ''
         idr_exchange_rate = {
             "USD": {},
+            "SGD": {},
+            "EUR": {},
+            "CNY": {},
+            "GBP": {},
+            "JPY": {},
+            "SAR": {}
         }
 
         # loop bank rate tables
@@ -56,12 +62,38 @@ class ExchangeRateSpider(scrapy.Spider):
 
                     ## record beli
                     idr_exchange_rate['USD']['buy'] = parse_price_rate(element_selector.css('td:nth-child(3)::text').get())
+                    idr_exchange_rate['SGD']['buy'] = parse_price_rate(element_selector.css('td:nth-child(4)::text').get())
+                    idr_exchange_rate['EUR']['buy'] = parse_price_rate(element_selector.css('td:nth-child(6)::text').get())
+                    # yuan is possibly null
+                    idr_exchange_rate['CNY']['buy'] = parse_price_rate(element_selector.css('td:nth-child(7)::text').get(default=None))
+                    idr_exchange_rate['GBP']['buy'] = parse_price_rate(element_selector.css('td:nth-child(9)::text').get())
+                    idr_exchange_rate['JPY']['buy'] = parse_price_rate(element_selector.css('td:nth-child(10)::text').get())
+                    # handling field for riyal
+                    if parse_bank_name(response.url) == 'bi' or 'mandiri' or 'bca' or 'bni' or 'bri':
+                        idr_exchange_rate['SAR']['buy'] = parse_price_rate(element_selector.css('td:nth-child(15)::text').get())
+                    elif parse_bank_name(response.url) == 'btn':
+                        idr_exchange_rate['SAR']['buy'] = parse_price_rate(element_selector.css('td:nth-child(12)::text').get())
+                    else:
+                        idr_exchange_rate['SAR']['buy'] = None
 
                     ## skip adding to yield to make sure buy & sell tied together in one record
                     continue
                 else:
                     ## record jual
                     idr_exchange_rate['USD']['sell'] = parse_price_rate(element_selector.css('td:nth-child(2)::text').get())
+                    idr_exchange_rate['SGD']['sell'] = parse_price_rate(element_selector.css('td:nth-child(3)::text').get())
+                    idr_exchange_rate['EUR']['sell'] = parse_price_rate(element_selector.css('td:nth-child(5)::text').get())
+                    # yuan is possibly null
+                    idr_exchange_rate['CNY']['sell'] = parse_price_rate(element_selector.css('td:nth-child(6)::text').get(default=None))
+                    idr_exchange_rate['GBP']['sell'] = parse_price_rate(element_selector.css('td:nth-child(8)::text').get())
+                    idr_exchange_rate['JPY']['sell'] = parse_price_rate(element_selector.css('td:nth-child(9)::text').get())
+                    # handling field for riyal
+                    if parse_bank_name(response.url) == 'bi' or 'mandiri' or 'bca' or 'bni' or 'bri':
+                        idr_exchange_rate['SAR']['sell'] = parse_price_rate(element_selector.css('td:nth-child(14)::text').get())
+                    elif parse_bank_name(response.url) == 'btn':
+                        idr_exchange_rate['SAR']['sell'] = parse_price_rate(element_selector.css('td:nth-child(11)::text').get())
+                    else:
+                        idr_exchange_rate['SAR']['sell'] = None
 
                     ## skip if there's no data
                     if not (date_field and idr_exchange_rate['USD']['buy']):
