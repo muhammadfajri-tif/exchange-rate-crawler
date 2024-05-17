@@ -3,14 +3,12 @@ from src.utils import *
 
 
 base_url = "https://kursdollar.org/bank"
-# banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'cimb', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
-banks = ['bi', 'mandiri', 'bca', 'bni']
+banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'cimb', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
 query = 'v_range=01/01/2024-05/31/2024'
 
 class ExchangeRateSpider(scrapy.Spider):
     name = "exchange_rate"
     allowed_domains = ["kursdollar.org"]
-    # start_urls = ["https://kursdollar.org/bank/mandiri.php"]
     start_urls = [f"{base_url}/{bank}.php" for bank in banks]
     # start_urls = [f"{base_url}/{bank}.php?{query}" for bank in banks]
 
@@ -101,7 +99,6 @@ class ExchangeRateSpider(scrapy.Spider):
 
                 yield {
                     'type': table['name'],
-                    'url': response.url,
                     'bank': parse_bank_name(response.url),
                     'date': parse_date_time(' '.join(date_field)),
                     'IDRExchangeRate': idr_exchange_rate,
