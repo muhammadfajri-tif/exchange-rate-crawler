@@ -1,3 +1,8 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Scrapy settings for data_crawler project
 #
 # For simplicity, this file contains only settings considered important or
@@ -91,3 +96,23 @@ AUTOTHROTTLE_DEBUG = False
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+# AWS S3 config
+app_env = os.getenv('APP_ENV')
+path_prefix = "prod" if (app_env == ("prod" or "production")) else "dev"
+
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+s3_bucket = os.getenv('BUCKET_NAME')
+
+FEEDS = {
+    f"s3://{s3_bucket}/{path_prefix}/scraping/exchange-rates.json": {
+        'format': 'json',
+        'store_empty': False,
+        'indent': 4
+    },
+    f"s3://{s3_bucket}/{path_prefix}/scraping/exchange-rates.csv": {
+        'format': 'csv',
+        'store_empty': False
+    }
+}
