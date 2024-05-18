@@ -29,9 +29,9 @@ def parse_time(date: str) -> str:
     """Method for parse time from string"""
     return date.split()[2]
 
-def parse_date_time(date_str: str) -> float:
+def parse_date_time(date_str: str) -> int:
     """Method for parse date and time to epoch time"""
     date = parse_date(date_str)
     time = parse_time(date_str)
 
-    return datetime.datetime.strptime(f"{date} {time}", "%d/%m/%Y %H:%M").timestamp()
+    return int(datetime.datetime.strptime(f"{date} {time}", "%d/%m/%Y %H:%M").timestamp())
