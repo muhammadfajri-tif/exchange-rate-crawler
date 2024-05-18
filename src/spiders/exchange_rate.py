@@ -9,8 +9,8 @@ query = 'v_range=01/01/2024-05/31/2024'
 class ExchangeRateSpider(scrapy.Spider):
     name = "exchange_rate"
     allowed_domains = ["kursdollar.org"]
-    start_urls = [f"{base_url}/{bank}.php" for bank in banks]
-    # start_urls = [f"{base_url}/{bank}.php?{query}" for bank in banks]
+    # start_urls = [f"{base_url}/{bank}.php" for bank in banks]
+    start_urls = [f"{base_url}/{bank}.php?{query}" for bank in banks]
 
     def parse(self, response, **kwargs):
         for rates in response.css('table'):
