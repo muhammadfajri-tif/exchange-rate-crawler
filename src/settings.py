@@ -109,7 +109,6 @@ FEEDS = {
     f"s3://{s3_bucket}/{path_prefix}/scraping/exchange-rates.json": {
         'format': 'json',
         'store_empty': False,
-        'indent': 4
     },
     f"s3://{s3_bucket}/{path_prefix}/scraping/exchange-rates.csv": {
         'format': 'csv',
