@@ -103,7 +103,9 @@ path_prefix = "prod" if (app_env == ("prod" or "production")) else "dev"
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+
 s3_bucket = os.getenv('BUCKET_NAME')
+FEED_STORAGE_S3_ACL = "public-read"
 
 FEEDS = {
     f"s3://{s3_bucket}/{path_prefix}/scraping/exchange-rates.json": {
