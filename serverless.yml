@@ -52,6 +52,6 @@ functions:
       # Invoke Lambda function twice at 7am/pm UTC+7 or 0am/pm UTC+0 from Mon-Fri
       - schedule: 
           name: crawler-service-scheduler
-          description: Schedule for invoke lambda twice at 12 am/pm UTC+0 from Mon-Fri 
-          rate: cron(0 0,12 ? * MON-FRI *)
+          description: Schedule for invoke lambda every 12 pm UTC+0 from Mon-Fri 
+          rate: cron(0 12 ? * MON-FRI *)
           enabled: true
