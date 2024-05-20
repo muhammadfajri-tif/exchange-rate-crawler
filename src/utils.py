@@ -17,8 +17,12 @@ def parse_rate(rate: str) -> tuple[str, float]:
 
 def parse_price_rate(rate: str | None) -> str | None:
     """Method for parse price rate"""
-    return rate.replace('.', '').replace(',', '.') if isinstance(rate, str) and rate.find(',') >= 0 else None
-
+    try:
+        parser = rate.replace('.', '').replace(',', '.') if isinstance(rate, str) and rate.find(',') >= 0 else ""
+        float(parser)
+        return str(parser) if parser else None
+    except ValueError:
+        return None
 
 # date related
 def parse_date(date: str) -> str:
