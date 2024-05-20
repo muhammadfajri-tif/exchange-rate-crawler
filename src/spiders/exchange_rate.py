@@ -3,7 +3,7 @@ from src.utils import *
 
 
 base_url = "https://kursdollar.org/bank"
-banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'cimb', 'ekonomi', 'permata', 'ocbc', 'btn', 'panin']
+banks = ['bi', 'bca', 'bni', 'bri', 'mandiri', 'cimb', 'ekonomi', 'permata', 'ocbc', 'panin']
 query = 'v_range=01/01/2024-05/31/2024'
 
 class ExchangeRateSpider(scrapy.Spider):
