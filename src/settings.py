@@ -102,13 +102,15 @@ app_env = os.getenv('APP_ENV')
 
 # logging
 if (app_env == ("prod" or "production")):
-    LOG_LEVEL=logging.ERROR
+    LOG_LEVEL = 'ERROR'
 
 # AWS S3 config
 path_prefix = "prod" if (app_env == ("prod" or "production")) else "dev"
 
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+if app_env == ("prod" or "production"):
+    AWS_SESSION_TOKEN = os.getenv('AWS_SESSION_TOKEN')
 
 s3_bucket = os.getenv('BUCKET_NAME')
 FEED_STORAGE_S3_ACL = "public-read"
