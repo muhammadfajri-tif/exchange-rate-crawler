@@ -1,0 +1,10 @@
+{
+  "name": "exchange-rate-crawler",
+  "version": "1.0.0",
+  "description": "crawler service for exchange rate",
+  "license": "MIT",
+  "private": "false",
+  "devDependencies": {
+    "serverless-python-requirements": "^6.1.0"
+  }
+}

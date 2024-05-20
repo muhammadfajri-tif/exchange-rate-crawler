@@ -1,0 +1,57 @@
+service: exchange-rate-app-crawler-service
+frameworkVersion: '3'
+useDotenv: true
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    usePipenv: true
+
+provider:
+  name: aws
+  runtime: python3.12
+  region: ap-southeast-1
+  logRetentionInDays: 7
+  deploymentPrefix: ${env:APP_ENV}/serverless
+  deploymentBucket:
+    name: ${env:BUCKET_NAME}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:Put*"
+      Resource: "arn:aws:s3:::${env:BUCKET_NAME}/*"
+  tags:
+    PROJECT: exchange-rate-app
+    SERVICE: crawler-service
+
+package:
+  exclude:
+    - "./**"
+    - "src/test/**"
+  include:
+    - "src/**"
+    - "lambda_fn.py"
+    - "requirements.txt"
+    - "scrapy.cfg"
+    - "pyrightconfig.json"
+ 
+functions:
+  cronHandler:
+    name: crawler-service-fn
+    description: Function for automatic crawl data using cron
+    handler: lambda_fn.handler
+    runtime: python3.12
+    memorySize: 512
+    timeout: 600
+    environment:
+      APP_ENV: ${env:APP_ENV}
+      BUCKET_NAME: ${env:BUCKET_NAME}
+    events:
+      # Invoke Lambda function twice at 7am/pm UTC+7 or 0am/pm UTC+0 from Mon-Fri
+      - schedule: 
+          name: crawler-service-scheduler
+          description: Schedule for invoke lambda twice at 12 am/pm UTC+0 from Mon-Fri 
+          rate: cron(0 0,12 ? * MON-FRI *)
+          enabled: true
