@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from scrapy.spiders import logging
 
 load_dotenv()
 
@@ -97,8 +98,13 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-# AWS S3 config
 app_env = os.getenv('APP_ENV')
+
+# logging
+if (app_env == ("prod" or "production")):
+    LOG_LEVEL=logging.ERROR
+
+# AWS S3 config
 path_prefix = "prod" if (app_env == ("prod" or "production")) else "dev"
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY')
