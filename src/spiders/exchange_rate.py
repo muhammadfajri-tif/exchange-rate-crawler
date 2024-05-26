@@ -98,7 +98,7 @@ class ExchangeRateSpider(scrapy.Spider):
                         continue
 
                 yield {
-                    'type': 'special rates' if parse_bank_name(response.url) == 'mandiri' else table['name'],
+                    'type': 'special rates' if (parse_bank_name(response.url) == 'mandiri' and table['name'] == 'e-rates') else table['name'],
                     'bank': parse_bank_name(response.url),
                     'date': parse_date_time(' '.join(date_field)),
                     'IDRExchangeRate': idr_exchange_rate,
