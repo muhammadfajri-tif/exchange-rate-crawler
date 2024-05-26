@@ -38,4 +38,4 @@ def parse_date_time(date_str: str) -> int:
     date = parse_date(date_str)
     time = parse_time(date_str)
 
-    return int(datetime.datetime.strptime(f"{date} {time}", "%d/%m/%Y %H:%M").timestamp())
+    return int(datetime.datetime.strptime(f"{date} {time}", "%d/%m/%Y %H:%M").timestamp()) * 1000
