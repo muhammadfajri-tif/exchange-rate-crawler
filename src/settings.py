@@ -101,8 +101,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 app_env = os.getenv('APP_ENV')
 
 # logging
-if (app_env == ("prod" or "production")):
-    LOG_LEVEL = 'ERROR'
+LOG_LEVEL = 'ERROR' if app_env == ("prod" or "production") else 'INFO'
 
 # AWS S3 config
 path_prefix = "prod" if (app_env == ("prod" or "production")) else "dev"
