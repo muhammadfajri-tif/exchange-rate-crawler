@@ -26,7 +26,7 @@ class ExchangeRateSpider(scrapy.Spider):
                 'tables': [
                     {'name': 'bank notes', 'payload': bank_notes},
                     {'name': 'dd/tt', 'payload': dd_tt},
-                    {'name': 'special rates', 'payload': e_rates},
+                    {'name': 'e-rates', 'payload': e_rates},
                 ]
             }
 
@@ -98,7 +98,7 @@ class ExchangeRateSpider(scrapy.Spider):
                         continue
 
                 yield {
-                    'type': table['name'],
+                    'type': 'special rates' if parse_bank_name(response.url) == 'mandiri' else table['name'],
                     'bank': parse_bank_name(response.url),
                     'date': parse_date_time(' '.join(date_field)),
                     'IDRExchangeRate': idr_exchange_rate,
