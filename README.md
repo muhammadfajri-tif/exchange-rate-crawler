@@ -1,9 +1,6 @@
 # Data Crawler
 
-> [!Important]
-> Docs is under construction 🚧
-
-Crawler service for Exchange Rate App.
+Crawler service for Exchange Rate App. Written in Python. Utilize [Scrapy](https://scrapy.org/) framework for efficient scraping operations.
 
 ## Installation
 
@@ -61,38 +58,38 @@ Crawler service for Exchange Rate App.
 
 ### Run locally
 
-- **Storing data on Cloud Storage (AWS S3)**
+#### Storing data on Cloud Storage (AWS S3)
 
-    >[!IMPORTANT]
-    > You must have an AWS account and set the `.env` file properly. Create credential for programmatic access to AWS S3. This can be achieve by creating IAM role or user with `AmazonS3FullAccess` policy attached. [Learn more](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-user.html).
+> [!IMPORTANT]
+> You must have an AWS account and set the `.env` file properly. Create credential for programmatic access to AWS S3. This can be achieve by creating IAM role or user with `AmazonS3FullAccess` policy attached. [Learn more](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-user.html).
 
-    To run crawler simply run following command:
+To run crawler simply run following command:
 
-    ```bash
-    scrapy crawl exchange_rate
-    ```
+```bash
+scrapy crawl exchange_rate
+```
 
-- **Storing data locally**
+#### Storing data locally
     
-    If you want to export the data as json:
+If you want to export the data as json:
 
-    ```bash
-    scrapy crawl exchange_rate -O scraping-data.json
-    ```
+```bash
+scrapy crawl exchange_rate -O scraping-data.json
+```
 
-    or if you want to export the data as csv, simply just run the following command:
+or if you want to export the data as csv, simply just run the following command:
 
-    ```bash
-    scrapy crawl exchange_rate -O scraping-data.csv
-    ```
+```bash
+scrapy crawl exchange_rate -O scraping-data.csv
+```
 
-    > [!TIP]
-    > You can change the file name by changing `scraping-data` to the file name you want. You can also specify path location to save the file by using relative path. <br/>
-    > For example, if you want to save the scraping results in json format and the file name is `data` in the `export` folder. Simply replace `scraping-data.json` from command above to `export/data.json`
+> [!TIP]
+> You can change the file name by changing `scraping-data` to the file name you want. You can also specify path location to save the file by using relative path. <br/>
+> For example, if you want to save the scraping results in json format and the file name is `data` in the `export` folder. Simply replace `scraping-data.json` from command above to `export/data.json`
 
 ### Run on AWS
 
->[!IMPORTANT]
+> [!IMPORTANT]
 > You must have an AWS account and set the `.env` file properly. AWS credentials are required to deploy the code. Read each section carefully.
 
 #### Overview
@@ -134,11 +131,6 @@ There are several configuration that can be customized:
     sls deploy --stage prod
     ```
 
-    >[!NOTE]
+    > [!NOTE]
     > The argument `--stage prod` tells serverless framework to deploy the project with production stage.
 
----
-
-## Troubleshooting
-
-coming soon...
