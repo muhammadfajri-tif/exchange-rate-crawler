@@ -15,6 +15,10 @@ Crawler service for Exchange Rate App. Written in Python. Utilize [Scrapy](https
 
 ### Setup
 
+> [!TIP]
+> Use virtual environments like venv to separate packages/dependencies that required for this project. To create virtual environments please refer to [this docs](https://docs.python.org/3/library/venv.html#creating-virtual-environments).
+
+
 1. Clone [this project](https://github.com/muhammadfajri-tif/exchange-rate-crawler).
 
     For example to clone using git with https:
@@ -24,10 +28,6 @@ Crawler service for Exchange Rate App. Written in Python. Utilize [Scrapy](https
     ```
 
 2. Install required packages/dependencies
-
-> [!TIP]
-> Use virtual environments like venv to separate packages/dependencies that required for this project. To create virtual environments please refer to [this docs](https://docs.python.org/3/library/venv.html#creating-virtual-environments).
-
 
     ```bash
     pip install -r requirements.txt
