@@ -91,7 +91,7 @@ scrapy crawl exchange_rate -O scraping-data.csv
 ```
 
 > [!TIP]
-> You can change the file name by changing `scraping-data` to the file name you want. You can also specify path location to save the file by using relative path. <br/>
+> You can change the file name by changing `scraping-data` to the file name you want. You can also specify path location to save the file by using relative path. <br/> <br/>
 > For example, if you want to save the scraping results in json format and the file name is `data` in the `export` folder. Simply replace `scraping-data.json` from command above to `export/data.json`
 
 ### Run on AWS
