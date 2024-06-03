@@ -51,6 +51,13 @@ Crawler service for Exchange Rate App. Written in Python. Utilize [Scrapy](https
     | `AWS_SECRET_ACCESS_KEY` | required if `BUCKET_NAME` is set otherwise it's optional | Secret access key is used in pairs with the access key for grants programmatic access to AWS resources. |
     | `AWS_REGION_NAME` | required if `BUCKET_NAME` is set otherwise it's optional | Used for set AWS Region that stores the S3 bucket. For example `us-east-1`, `ap-southeast-1`, etc. For information about AWS Regions, please refer to the [official docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.Regions). |
 
+4. (optional) Run unit test
+
+At the root project directory execute the following command to run all the available unit test:
+
+```bash
+python -m unittest src/test/*.py -v
+```
 
 ---
 
