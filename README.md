@@ -25,8 +25,8 @@ Crawler service for Exchange Rate App. Written in Python. Utilize [Scrapy](https
 
 2. Install required packages/dependencies
 
-    > [!TIP]
-    > Use virtual environments like venv to separate packages/dependencies that required for this project. To create virtual environments please refer to [this docs](https://docs.python.org/3/library/venv.html#creating-virtual-environments).
+> [!TIP]
+> Use virtual environments like venv to separate packages/dependencies that required for this project. To create virtual environments please refer to [this docs](https://docs.python.org/3/library/venv.html#creating-virtual-environments).
 
 
     ```bash
@@ -138,6 +138,6 @@ There are several configuration that can be customized:
     sls deploy --stage prod
     ```
 
-    > [!NOTE]
-    > The argument `--stage prod` tells serverless framework to deploy the project with production stage.
+> [!NOTE]
+> The argument `--stage prod` tells serverless framework to deploy the project with production stage.
 
