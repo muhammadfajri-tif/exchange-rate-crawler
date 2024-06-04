@@ -50,6 +50,10 @@ class ExchangeRateSpider(scrapy.Spider):
 
         # loop bank rate tables
         for table in response.meta['tables']:
+            type = 'special rates' if (parse_bank_name(response.url) == 'mandiri' and table['name'] == 'e-rates') else table['name']
+            # handle panin doesn't have bank notes table
+            if (parse_bank_name(response.url) == 'panin'):
+                type = 'dd/tt' if (table['name'] == 'bank notes') else 'e-rates'
 
             # loop rows each table rates
             for i, rate in enumerate(table['payload']):
@@ -98,7 +102,7 @@ class ExchangeRateSpider(scrapy.Spider):
                         continue
 
                 yield {
-                    'type': 'special rates' if (parse_bank_name(response.url) == 'mandiri' and table['name'] == 'e-rates') else table['name'],
+                    'type': type,
                     'bank': parse_bank_name(response.url),
                     'date': parse_date_time(' '.join(date_field)),
                     'IDRExchangeRate': idr_exchange_rate,
